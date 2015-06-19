@@ -1,0 +1,123 @@
+<!DOCTYPE html> 
+<html ng-app="myApp"> 
+<head> 
+  <title>irent</title>             
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+
+
+  <script src="js/libs/jquery-1.10.2.min.js"></script>  
+  <script src="js/libs/angular.min.js"></script>        
+  <script src="js/libs/angular-route.min.js"></script> 
+  <script src="js/libs/angular-resource.min.js"></script> 
+  <script src="js/libs/angular-cookies.min.js"></script> 
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script src="js/controllers.js"></script>
+  <style>
+    .ng-invalid.ng-dirty {
+     border: 1px solid red;
+     border-color: red;
+   }
+   .ng-valid.ng-dirty {
+     border: 1px solid green;
+     border-color: green;
+   }
+
+
+
+ </style>
+
+</head> 
+
+<body>    
+
+
+  <div ng-controller="MainController">
+    <ul class="list-group">
+     <li ng-repeat="product in products | orderBy:'-price'" class="list-item">
+      <h2>{{product.name}}
+       <em class="pull-right">{{product.price | currency}}</em>
+       <img ng-src="{{product.images[1].full}}"/>
+     </h2>
+     <p>{{product.description}}</p>
+
+     <button ng-show="product.canRent" class="btn btn-success">Add to Cart</button></br></br>
+
+
+
+     <section ng-controller="PanelController">
+       <ul class="nav nav-tabs">
+        <!--  active is name of class and if expression is true, the class adds -->
+        <li role="navigation" ng-class="{active:isSelected(1)}">
+         <a href ng-click="selectTab(1)">Description</a>
+       </li>
+
+       <li role="navigation" ng-class="{active:isSelected(3)}">
+         <a href ng-click="selectTab(3)">Pricing</a>
+       </li>
+
+       <li role="navigation" ng-class="{active:isSelected(4) }">
+         <a href ng-click="selectTab(4)">Reviews</a>
+       </li>
+
+
+       <div class="panel" ng-show="isSelected(1)">
+         <br><br> <p>{{product.description}}</p>
+       </div>
+
+       <div class="panel" ng-show="isSelected(3)">
+         <br><br> <p>{{product.pricing}}</p>
+       </div>
+
+       <div class="panel" ng-show="isSelected(4)">
+         <blockquote ng-repeat="review in product.reviews">
+          <p><b>Stars: {{review.stars}}</b></p>
+          <p>{{review.body}}</p>
+          <cite>--{{review.author}}</cite>
+        </blockquote>
+
+
+
+        <form name="reviewForm" ng-controller="ReviewController" ng-submit=" reviewForm.$valid && addReview(product)" novalidate>
+          <blockquote>
+           <b>Stars:</b> {{review.stars + " " + review.body}}
+
+           <cite>{{review.author}}</cite>
+         </blockquote>
+         <select ng-model="review.stars" required>
+           <option value="1">1 star</option>
+           <option value="2">2 stars</option>
+           <option value="3">3 stars</option>
+           <option value="4">4 stars</option>
+           <option value="5">5 stars</option>
+         </select>
+         <textarea ng-model="review.body" required></textarea>
+         <label>by:</label>
+         <input ng-model="review.author" type="email" required />
+         <input ng-model="review.terms" type="checkbox" required/> I agree to iRent terms
+         <div> reviewForm is {{reviewForm.$valid}} </div>
+         <input class="btn btn-primary" type="submit" value="Submit" />
+       </form>
+
+
+
+
+     </div>
+   </ul>
+ </section>
+
+
+</li>
+</ul>
+</div>
+
+
+
+</body> 
+</html> 
